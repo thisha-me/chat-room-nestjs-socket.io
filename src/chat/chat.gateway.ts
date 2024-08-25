@@ -13,18 +13,18 @@ import { Server, Socket } from 'socket.io';
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: Server;
 
-  handleConnection(client: any) {
+  handleConnection(client: Socket) {
     console.log('Client connected: ' + client.id);
 
-    this.server.emit('user-joined', {
+    client.broadcast.emit('user-joined', {
       message: `User Joined the chat: ${client.id}`,
     });
   }
 
-  handleDisconnect(client: any) {
+  handleDisconnect(client: Socket) {
     console.log('Client disconnected: ' + client.id);
 
-    this.server.emit('user-left', {
+    client.broadcast.emit('user-left', {
       message: `User Left the chat: ${client.id}`,
     });
   }
